@@ -4,16 +4,16 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class InitialWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class InitialWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    InitialWindow(QWidget *parent = nullptr);
+    ~InitialWindow();
 
 private slots:
     void on_pushButton_next_clicked();
@@ -21,6 +21,6 @@ private slots:
     void on_pushButton_prev_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::InitialWindow *ui;
 };
-#endif // MAINWINDOW_H
+#endif // INITIALWINDOW_H

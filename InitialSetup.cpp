@@ -1,20 +1,20 @@
 #include "InitialSetup.h"
 #include "ui_InitialSetup.h"
 
-MainWindow::MainWindow(QWidget *parent)
+InitialWindow::InitialWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::InitialWindow)
 {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+InitialWindow::~InitialWindow()
 {
     delete ui;
 }
 
 
-void MainWindow::on_pushButton_next_clicked()
+void InitialWindow::on_pushButton_next_clicked()
 {
     switch(ui->stackedWidget->currentIndex())
     {
@@ -30,7 +30,7 @@ void MainWindow::on_pushButton_next_clicked()
     }
 }
 
-void MainWindow::on_pushButton_prev_clicked()
+void InitialWindow::on_pushButton_prev_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
     ui->pushButton_prev->setEnabled(false);
