@@ -13,6 +13,7 @@ SOURCES += \
     HardDriveTableModel.cpp \
     InitialSetup.cpp \
     MainWindow.cpp \
+    NewRequestsModel.cpp \
     main.cpp
 
 HEADERS += \
@@ -20,6 +21,7 @@ HEADERS += \
     HardDriveTableModel.h \
     InitialSetup.h \
     MainWindow.h \
+    NewRequestsModel.h \
     RequestModel.h
 
 FORMS += \
