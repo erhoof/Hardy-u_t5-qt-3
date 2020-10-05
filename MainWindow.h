@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "HardDriveTableModel.h"
+#include "NewRequestsModel.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,8 +20,22 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    HardDriveTableModel m_hardDriveModel;
 
+    HardDriveTableModel m_hardDriveModel;
+    NewRequestsModel m_newReqModel;
+
+    // Request ID
+    uint m_curId = 0;
+    uint m_curSector = 0;
+    uint m_curCylinder = 0;
+
+    void addRequest();
+    QString randomCharSeq(int length);
+
+    int timerId;
+
+protected:
+    void timerEvent(QTimerEvent *event);
 };
 
 #endif // MAINWINDOW_H
