@@ -1,6 +1,7 @@
 #include "HardDriveTableModel.h"
 
 #include "HardDrive.h"
+#include <QColor>
 
 HardDriveTableModel::HardDriveTableModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -28,14 +29,23 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::DisplayRole)
+    switch (role)
     {
+    case Qt::DisplayRole:
         return 1;
-    }
-    else if (role == Qt::TextAlignmentRole)
-    {
+        break;
+    case Qt::TextAlignmentRole:
         return Qt::AlignCenter;
+        break;
+    case Qt::BackgroundRole:
+        if (index.column() == m_curSector)
+            return QVariant(QColor(Qt::green));
+    default:
+        return QVariant();
     }
+}
 
-    return QVariant();
+void HardDriveTableModel::timerTick()
+{
+
 }
