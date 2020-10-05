@@ -1,19 +1,27 @@
 #ifndef HARDDRIVE_H
 #define HARDDRIVE_H
 
+#include <QObject>
+
+enum class Direction {
+    In, Out
+};
+
 struct HardDriveInfo
 {
     float m_accessTime = 1;
     float m_rotationDelay = 0.5;
     float m_transferSpeed = 10.0;
 
-    int m_cylinders = 10;
-    int m_sectors = 30;
-    int m_heads = 1;
+    uint m_cylinders = 10;
+    uint m_sectors = 30;
+    uint m_heads = 1;
 };
 
-class HardDrive
+class HardDrive : public QObject
 {
+    Q_OBJECT
+
 public:
     static HardDrive *instance();
 
@@ -23,9 +31,15 @@ public:
     float rotationDelayValue() const;
     float transferSpeedValue() const;
 
-    int cylindersCount() const;
-    int sectorsCount() const;
-    int headsCount() const;
+    uint cylindersCount() const;
+    uint sectorsCount() const;
+    uint headsCount() const;
+
+    Direction curDirection() const;
+
+public slots:
+    void tick();
+
 private:
     static HardDrive *m_instance;
 
@@ -37,9 +51,13 @@ private:
     float m_rotationDelay = 0.5;
     float m_transferSpeed = 10.0;
 
-    int m_cylinders = 5;
-    int m_sectors = 15;
-    int m_heads = 1;
+    uint m_cylinders = 5;
+    uint m_sectors = 15;
+    uint m_heads = 1;
+
+    uint m_curCylinder = 0;
+    uint m_curSector = 0;
+    Direction m_curDirection = Direction::In;
 };
 
 #endif // HARDDRIVE_H
