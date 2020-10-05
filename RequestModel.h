@@ -8,15 +8,33 @@ struct RequestModel
     uint id;
     QString filename;
 
-    int cyllinder;
-    int sector;
+    uint cylinder;
+    uint sector;
 
     QTime creationTime;
     QTime finishTime;
 
-    int progressMsecs()
+    int progressSecs()
     {
-        return creationTime.msecsTo(finishTime);
+        return creationTime.secsTo(finishTime);
+    }
+
+    QString toString()
+    {
+        if (finishTime == creationTime)
+            return QString("%1 (%2) [c%3:s%4] :: start At %5")
+                    .arg(QString::number(id),
+                         filename,
+                         QString::number(cylinder),
+                         QString::number(sector),
+                         creationTime.toString("hh:mm:ss.z"));
+        else
+            return QString("%1 (%2) [c%3:s%4] :: for %5 secs")
+                    .arg(QString::number(id),
+                         filename,
+                         QString::number(cylinder),
+                         QString::number(sector),
+                         QString::number(progressSecs()));
     }
 };
 
