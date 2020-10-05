@@ -40,8 +40,6 @@ private:
     int m_cylinders = 10;
     int m_sectors = 30;
     int m_heads = 1;
-
-    void allocateSpace();
 };
 
 #endif // HARDDRIVE_H

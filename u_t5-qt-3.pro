@@ -10,12 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     HardDrive.cpp \
+    HardDriveTableModel.cpp \
     InitialSetup.cpp \
     MainWindow.cpp \
     main.cpp
 
 HEADERS += \
     HardDrive.h \
+    HardDriveTableModel.h \
     InitialSetup.h \
     MainWindow.h
 

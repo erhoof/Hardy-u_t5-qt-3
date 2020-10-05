@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "HardDriveTableModel.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    HardDriveTableModel m_hardDriveModel;
+
 };
 
 #endif // MAINWINDOW_H
