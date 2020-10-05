@@ -22,7 +22,7 @@ QVariant NewRequestsModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        return m_list[0].toString();
+        return m_list[index.row()].toString();
     }
 
     return QVariant();
