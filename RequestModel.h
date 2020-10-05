@@ -14,12 +14,12 @@ struct RequestModel
     QTime creationTime;
     QTime finishTime;
 
-    int progressSecs()
+    int progressSecs() const
     {
         return creationTime.secsTo(finishTime);
     }
 
-    QString toString()
+    QString toString() const
     {
         if (finishTime == creationTime)
             return QString("%1 (%2) [c%3:s%4] :: start At %5")
