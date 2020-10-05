@@ -70,8 +70,8 @@ void MainWindow::timerEvent(QTimerEvent *event)
         addRequest();
     }
 
-    m_curSector++; // Next Sector
+    /*m_curSector++; // Next Sector
     if (m_curSector == HardDrive::instance()->sectorsCount())
         m_curSector = 0;
-    m_hardDriveModel.m_curSector = m_curSector;
+    m_hardDriveModel.m_curSector = m_curSector;*/
 }
