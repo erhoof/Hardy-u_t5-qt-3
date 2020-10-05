@@ -60,6 +60,9 @@ private:
     uint m_curCylinder = 0;
     uint m_curSector = 0;
     Direction m_curDirection = Direction::In;
+
+    // Speed multiplier for rotation
+    uint m_counter = 0;
 };
 
 #endif // HARDDRIVE_H

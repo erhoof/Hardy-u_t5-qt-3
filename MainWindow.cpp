@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_new->setModel(&m_newReqModel);
     ui->listView_new->show();
 
-    timerId = startTimer(250);
+    timerId = startTimer(50);
 }
 
 MainWindow::~MainWindow()

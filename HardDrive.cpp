@@ -94,15 +94,22 @@ Direction HardDrive::curDirection() const
 
 void HardDrive::tick()
 {
-    if (m_curCylinder == 0)
-        m_curDirection = Direction::Out;
-    else if (m_curCylinder == m_cylinders - 1)
-        m_curDirection = Direction::In;
+    if (m_counter == 3) {
+        if (m_curCylinder == 0)
+            m_curDirection = Direction::Out;
+        else if (m_curCylinder == m_cylinders - 1)
+            m_curDirection = Direction::In;
 
-    if (m_curDirection == Direction::In)
-        m_curCylinder--;
+        if (m_curDirection == Direction::In)
+            m_curCylinder--;
+        else
+            m_curCylinder++;
+        m_counter = 0;
+    }
     else
-        m_curCylinder++;
+    {
+        m_counter++;
+    }
 
     if (m_curSector == m_sectors - 1)
         m_curSector = 0;

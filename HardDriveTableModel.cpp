@@ -38,7 +38,10 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
         return Qt::AlignCenter;
         break;
     case Qt::BackgroundRole:
-        if (index.column() == static_cast<int>(HardDrive::instance()->curSector()))
+        if (index.column() == static_cast<int>(HardDrive::instance()->curSector()) &&
+            index.row() == static_cast<int>(HardDrive::instance()->curCylinder()))
+            return QVariant(QColor(Qt::red));
+        else if (index.column() == static_cast<int>(HardDrive::instance()->curSector()))
             return QVariant(QColor(Qt::green));
     default:
         return QVariant();
