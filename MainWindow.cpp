@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
     ui->tableView->setModel(&m_hardDriveModel);
 
     // Set sizing

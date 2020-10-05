@@ -19,7 +19,8 @@ HEADERS += \
     HardDrive.h \
     HardDriveTableModel.h \
     InitialSetup.h \
-    MainWindow.h
+    MainWindow.h \
+    RequestModel.h
 
 FORMS += \
     InitialSetup.ui \
