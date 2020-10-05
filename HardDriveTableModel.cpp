@@ -38,8 +38,8 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
         return Qt::AlignCenter;
         break;
     case Qt::BackgroundRole:
-        /*if (index.column() == m_curSector)
-            return QVariant(QColor(Qt::green));*/
+        if (index.column() == static_cast<int>(HardDrive::instance()->curSector()))
+            return QVariant(QColor(Qt::green));
     default:
         return QVariant();
     }
@@ -47,5 +47,10 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
 
 void HardDriveTableModel::timerTick()
 {
+    // Sector Column
+    auto hd = HardDrive::instance();
+    QModelIndex start = index(0, hd->curSector());
+    QModelIndex end = index(hd->cylindersCount(), hd->curSector());
 
+    emit dataChanged(start, end);
 }

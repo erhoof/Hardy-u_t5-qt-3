@@ -70,6 +70,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
         addRequest();
     }
 
+    HardDrive::instance()->tick();
+    m_hardDriveModel.timerTick();
+
     /*m_curSector++; // Next Sector
     if (m_curSector == HardDrive::instance()->sectorsCount())
         m_curSector = 0;

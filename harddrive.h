@@ -36,6 +36,8 @@ public:
     uint headsCount() const;
 
     Direction curDirection() const;
+    uint curCylinder() const;
+    uint curSector() const;
 
 public slots:
     void tick();

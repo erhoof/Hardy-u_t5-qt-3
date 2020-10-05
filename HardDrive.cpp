@@ -77,6 +77,16 @@ uint HardDrive::headsCount() const
     return m_heads;
 }
 
+uint HardDrive::curCylinder() const
+{
+    return m_curCylinder;
+}
+
+uint HardDrive::curSector() const
+{
+    return m_curSector;
+}
+
 Direction HardDrive::curDirection() const
 {
     return m_curDirection;
