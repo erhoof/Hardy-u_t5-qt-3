@@ -37,8 +37,8 @@ private:
     float m_rotationDelay = 0.5;
     float m_transferSpeed = 10.0;
 
-    int m_cylinders = 10;
-    int m_sectors = 30;
+    int m_cylinders = 5;
+    int m_sectors = 15;
     int m_heads = 1;
 };
 

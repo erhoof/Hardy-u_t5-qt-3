@@ -8,7 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    ui->tableView->setModel()
+    ui->tableView->setModel(&m_hardDriveModel);
+
+    // Set sizing
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui->tableView->show();
 }
 
 MainWindow::~MainWindow()

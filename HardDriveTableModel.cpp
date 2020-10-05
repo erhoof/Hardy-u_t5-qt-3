@@ -32,6 +32,10 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
     {
         return 1;
     }
+    else if (role == Qt::TextAlignmentRole)
+    {
+        return Qt::AlignCenter;
+    }
 
     return QVariant();
 }
