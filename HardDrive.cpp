@@ -1,50 +1,40 @@
 #include "HardDrive.h"
 
-HardDrive *HardDrive::m_instance = 0;
-
-HardDrive *HardDrive::instance()
-{
-    if (!m_instance)
-    {
-        m_instance = new HardDrive();
-    }
-
-    return m_instance;
-}
-
-bool HardDrive::initHardDrive(HardDriveInfo &info)
+HardDrive::HardDrive(HardDriveInfo &info)
 {
     if (info.m_accessTime > 0.0)
         m_accessTime = info.m_accessTime;
     else
-        return false;
+        m_accessTime = 1;
 
     if (info.m_cylinders > 0)
         m_cylinders = info.m_cylinders;
     else
-        return false;
+        m_cylinders = 5;
 
     if (info.m_heads > 0)
         m_heads = info.m_heads;
     else
-        return false;
+        m_heads = 1;
 
     if (info.m_rotationDelay > 0.0)
         m_rotationDelay = info.m_rotationDelay;
     else
-        return false;
+        m_rotationDelay = 2;
 
     if (info.m_sectors > 0)
         m_sectors = info.m_sectors;
     else
-        return false;
+        m_sectors = 10;
 
     if (info.m_transferSpeed > 0.0)
         m_transferSpeed = info.m_transferSpeed;
     else
-        return false;
+        m_transferSpeed = 10;
 
-    return true;
+    m_curCylinder = 0;
+    m_curSector = 0;
+    m_curDirection = Direction::Out;
 }
 
 float HardDrive::accessTimeValue() const
@@ -92,7 +82,7 @@ Direction HardDrive::curDirection() const
     return m_curDirection;
 }
 
-void HardDrive::tick()
+/*void HardDrive::tick()
 {
     if (m_counter == 3) {
         if (m_curCylinder == 0)
@@ -115,4 +105,4 @@ void HardDrive::tick()
         m_curSector = 0;
     else
         m_curSector++;
-}
+}*/

@@ -23,9 +23,7 @@ class HardDrive : public QObject
     Q_OBJECT
 
 public:
-    static HardDrive *instance();
-
-    bool initHardDrive(HardDriveInfo &info);
+    explicit HardDrive(HardDriveInfo &info);
 
     float accessTimeValue() const;
     float rotationDelayValue() const;
@@ -40,26 +38,22 @@ public:
     uint curSector() const;
 
 public slots:
-    void tick();
+    void accessTimeTick();
+    void rotationDelayTick();
+    void dataTransferTick();
 
 private:
-    static HardDrive *m_instance;
+    float m_accessTime;
+    float m_rotationDelay;
+    float m_transferSpeed;
 
-    HardDrive() = default;
-    HardDrive(const HardDrive &);
-    HardDrive &operator=(HardDrive &);
+    uint m_cylinders;
+    uint m_sectors;
+    uint m_heads;
 
-    float m_accessTime = 1;
-    float m_rotationDelay = 0.5;
-    float m_transferSpeed = 10.0;
-
-    uint m_cylinders = 5;
-    uint m_sectors = 15;
-    uint m_heads = 1;
-
-    uint m_curCylinder = 0;
-    uint m_curSector = 0;
-    Direction m_curDirection = Direction::In;
+    uint m_curCylinder;
+    uint m_curSector;
+    Direction m_curDirection;
 
     // Speed multiplier for rotation
     uint m_counter = 0;
