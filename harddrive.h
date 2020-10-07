@@ -3,20 +3,7 @@
 
 #include <QObject>
 
-enum class Direction {
-    In, Out
-};
-
-struct HardDriveInfo
-{
-    float m_accessTime = 1;
-    float m_rotationDelay = 0.5;
-    float m_transferSpeed = 10.0;
-
-    uint m_cylinders = 10;
-    uint m_sectors = 30;
-    uint m_heads = 1;
-};
+#include "HardDriveInfo.h"
 
 class HardDrive : public QObject
 {
@@ -53,7 +40,7 @@ private:
 
     uint m_curCylinder;
     uint m_curSector;
-    Direction m_curDirection;
+    Direction m_curDirection ;
 
     // Speed multiplier for rotation
     uint m_counter = 0;

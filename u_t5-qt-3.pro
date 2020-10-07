@@ -18,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     HardDrive.h \
+    HardDriveInfo.h \
     HardDriveTableModel.h \
     InitialSetup.h \
     MainWindow.h \
