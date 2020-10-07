@@ -11,9 +11,16 @@ struct HardDriveInfo
     float m_rotationDelay = 0.5;
     float m_transferSpeed = 10.0;
 
-    uint m_cylinders = 10;
-    uint m_sectors = 30;
-    uint m_heads = 1;
+    int m_cylinders = 10;
+    int m_sectors = 30;
+    int m_heads = 1;
+};
+
+struct HardDrivePointer
+{
+    int cylinder;
+    int head;
+    int sector;
 };
 
 #endif // HARDDRIVEINFO_H
