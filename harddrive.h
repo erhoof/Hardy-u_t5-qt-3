@@ -11,39 +11,49 @@ class HardDrive : public QObject
 
 public:
     explicit HardDrive(HardDriveInfo &info);
+    ~HardDrive();
 
     float accessTimeValue() const;
     float rotationDelayValue() const;
     float transferSpeedValue() const;
 
-    uint cylindersCount() const;
-    uint sectorsCount() const;
-    uint headsCount() const;
+    int cylindersCount() const;
+    int sectorsCount() const;
+    int headsCount() const;
 
+    HardDrivePointer position() const;
     Direction curDirection() const;
-    uint curCylinder() const;
-    uint curSector() const;
+
+    void getBitAt(HardDrivePointer position);
+    bool setBitAt(HardDrivePointer position, bool value);
+
+    bool getFinishValue();
 
 public slots:
     void accessTimeTick();
     void rotationDelayTick();
     void dataTransferTick();
 
+signals:
+    void byteReadFinish();
+    void byteWriteFinish();
+
 private:
+    bool ***m_data; // Head -> Cylinder -> Sector !!
+
     float m_accessTime;
     float m_rotationDelay;
     float m_transferSpeed;
 
-    uint m_cylinders;
-    uint m_sectors;
-    uint m_heads;
+    HardDrivePointer m_size;
+    HardDrivePointer m_position;
+    HardDrivePointer m_reqPosition;
 
-    uint m_curCylinder;
-    uint m_curSector;
-    Direction m_curDirection ;
+    Direction m_direction;
+    HardDriveStatus m_status;
+    bool m_newValue; // Value to Write / Read
 
-    // Speed multiplier for rotation
-    uint m_counter = 0;
+    void setDirectionTo(HardDrivePointer position);
 };
 
 #endif // HARDDRIVE_H
