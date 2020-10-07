@@ -5,6 +5,10 @@ enum class Direction {
     In, Out
 };
 
+enum class HardDriveStatus {
+    Read, Write, Free
+};
+
 struct HardDriveInfo
 {
     float m_accessTime = 1;
@@ -18,9 +22,9 @@ struct HardDriveInfo
 
 struct HardDrivePointer
 {
-    int cylinder;
-    int head;
-    int sector;
+    int cylinder = 0;
+    int head = 0;
+    int sector = 0;
 };
 
 #endif // HARDDRIVEINFO_H
