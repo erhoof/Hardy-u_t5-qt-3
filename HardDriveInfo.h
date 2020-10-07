@@ -25,6 +25,15 @@ struct HardDrivePointer
     int cylinder = 0;
     int head = 0;
     int sector = 0;
+
+    HardDrivePointer &operator=(const HardDrivePointer &value)
+    {
+        cylinder = value.cylinder;
+        head = value.head;
+        sector = value.sector;
+
+        return *this;
+    }
 };
 
 #endif // HARDDRIVEINFO_H
