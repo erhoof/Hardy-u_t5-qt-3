@@ -1,4 +1,6 @@
-#include "HardDrive.h"
+#include "harddrive.h"
+
+#include <QTimer>
 
 HardDrive::HardDrive(HardDriveInfo &info)
 {
@@ -48,6 +50,22 @@ HardDrive::HardDrive(HardDriveInfo &info)
             m_data[j][i] = new bool[m_size.sector];
         }
     }
+
+    // Setup timers
+    m_accessTickTimer = new QTimer(this);
+    m_rotationDelayTimer = new QTimer(this);
+    m_dataTransferTimer = new QTimer(this);
+    m_spinTimer = new QTimer(this);
+
+    connect(m_accessTickTimer, &QTimer::timeout, this, &HardDrive::accessTimeTick);
+    connect(m_rotationDelayTimer, &QTimer::timeout, this, &HardDrive::rotationDelayTick);
+    connect(m_dataTransferTimer, &QTimer::timeout, this, &HardDrive::dataTransferTick);
+    connect(m_spinTimer, &QTimer::timeout, this, &HardDrive::spinTick);
+
+    m_accessTickTimer->setInterval(m_accessTime);
+    m_rotationDelayTimer->setInterval(m_rotationDelay);
+    m_dataTransferTimer->setInterval(m_transferSpeed);
+    m_spinTimer->setInterval(100);
 }
 
 // Destructor
@@ -88,7 +106,7 @@ HardDrivePointer HardDrive::position() const
 
 Direction HardDrive::curDirection() const
 {
-    return m_curDirection;
+    return m_direction;
 }
 
 void HardDrive::getBitAt(HardDrivePointer position)
@@ -98,6 +116,11 @@ void HardDrive::getBitAt(HardDrivePointer position)
     m_reqPosition = position;
 
     m_status = HardDriveStatus::Read;
+
+    // Start search timers
+    m_spinTimer->stop(); // Stop animation
+    m_accessTickTimer->start();
+    m_rotationDelayTimer->start();
 }
 
 bool HardDrive::setBitAt(HardDrivePointer position, bool value)
@@ -112,6 +135,10 @@ bool HardDrive::setBitAt(HardDrivePointer position, bool value)
 
     m_newValue = value;
     m_status = HardDriveStatus::Write;
+
+    m_spinTimer->stop(); // Stop animation
+    m_accessTickTimer->start();
+    m_rotationDelayTimer->start();
 
     return true;
 }
@@ -142,40 +169,62 @@ void HardDrive::setDirectionTo(HardDrivePointer position)
 // Timers
 void HardDrive::accessTimeTick()
 {
+    m_position.cylinder = m_reqPosition.cylinder;
 
+    checkPosition();
+
+    m_accessTickTimer->stop();
 }
 
 void HardDrive::rotationDelayTick()
 {
+    m_position.sector = m_reqPosition.sector;
 
+    checkPosition();
+
+    m_rotationDelayTimer->stop();
 }
 
 void HardDrive::dataTransferTick()
 {
+    if (m_status == HardDriveStatus::Read)
+    {
+        m_newValue = m_data[m_reqPosition.head][m_reqPosition.cylinder][m_reqPosition.sector];
+        // Free is not set for thread safety
+        emit byteReadFinish();
+    }
+    else if (m_status == HardDriveStatus::Write)
+    {
+        m_data[m_reqPosition.head][m_reqPosition.cylinder][m_reqPosition.sector] = m_newValue;
+        m_status = HardDriveStatus::Free;
+        emit byteWriteFinish();
+    }
 
+    m_dataTransferTimer->stop();
+    m_spinTimer->start(); // Start animation
 }
 
-/*void HardDrive::tick()
+void HardDrive::spinTick()
 {
-    if (m_counter == 3) {
-        if (m_curCylinder == 0)
-            m_curDirection = Direction::Out;
-        else if (m_curCylinder == m_cylinders - 1)
-            m_curDirection = Direction::In;
+    if (m_position.cylinder == 0)
+        m_direction = Direction::Out;
+    else if (m_position.cylinder == m_size.cylinder - 1)
+        m_direction = Direction::In;
 
-        if (m_curDirection == Direction::In)
-            m_curCylinder--;
-        else
-            m_curCylinder++;
-        m_counter = 0;
-    }
+    if (m_direction == Direction::In)
+        m_position.cylinder--;
     else
-    {
-        m_counter++;
-    }
+        m_position.cylinder++;
 
-    if (m_curSector == m_sectors - 1)
-        m_curSector = 0;
+    if (m_position.sector == m_size.sector - 1)
+        m_position.sector = 0;
     else
-        m_curSector++;
-}*/
+        m_position.sector++;
+}
+
+// Check if got req position
+void HardDrive::checkPosition()
+{
+    if (m_position == m_reqPosition)
+        m_dataTransferTimer->start();
+}

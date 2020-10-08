@@ -33,6 +33,7 @@ public slots:
     void accessTimeTick();
     void rotationDelayTick();
     void dataTransferTick();
+    void spinTick();
 
 signals:
     void byteReadFinish();
@@ -53,7 +54,13 @@ private:
     HardDriveStatus m_status;
     bool m_newValue; // Value to Write / Read
 
+    QTimer *m_accessTickTimer;
+    QTimer *m_rotationDelayTimer;
+    QTimer *m_dataTransferTimer;
+    QTimer *m_spinTimer; // For free mode
+
     void setDirectionTo(HardDrivePointer position);
+    void checkPosition();
 };
 
 #endif // HARDDRIVE_H
