@@ -1,9 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <QDebug>
+#include "harddrive.h"
 
-#include "HardDrive.h"
+#include "HardDriveTableModel.h"
+#include "NewRequestsModel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,20 +12,35 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Init Hard Drive
+    HardDriveInfo info;
+    info.m_accessTime = 2000;
+    info.m_rotationDelay = 1000;
+    info.m_transferSpeed = 1000;
+    info.m_cylinders = 5;
+    info.m_heads = 1;
+    info.m_sectors = 10;
+
+    m_hardDrive = new HardDrive(info);
+
+    // Init models
+    m_hardDriveModel = new HardDriveTableModel(nullptr, m_hardDrive);
+    m_newReqModel = new NewRequestsModel();
+
     // Hard Drive Scheme Table View
-    ui->tableView->setModel(&m_hardDriveModel);
+    ui->tableView->setModel(m_hardDriveModel);
+    connect(m_hardDrive, &HardDrive::dataChanged, m_hardDriveModel, &HardDriveTableModel::updateData);
 
     // Set sizing
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
     ui->tableView->show();
 
     // New Requests List
-    ui->listView_new->setModel(&m_newReqModel);
-    ui->listView_new->show();
+    /*ui->listView_new->setModel(m_newReqModel);
+    ui->listView_new->show();*/
 
-    timerId = startTimer(50);
+    timerId = startTimer(300);
 }
 
 MainWindow::~MainWindow()
@@ -39,10 +55,10 @@ void MainWindow::addRequest()
     newReq.creationTime = QTime::currentTime();
     newReq.finishTime = newReq.creationTime;
     newReq.filename = randomCharSeq(5) + '.' + randomCharSeq(3);
-    newReq.cylinder = rand() % HardDrive::instance()->cylindersCount();
-    newReq.sector = rand() % HardDrive::instance()->sectorsCount();
+    newReq.cylinder = rand() % m_hardDrive->cylindersCount();
+    newReq.sector = rand() % m_hardDrive->sectorsCount();
 
-    m_newReqModel.addRequest(newReq);
+    m_newReqModel->addRequest(newReq);
 
     m_curId++;
 }
@@ -65,16 +81,5 @@ QString MainWindow::randomCharSeq(int length)
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     if (rand() %10 == 1)
-    {
-        qDebug() << "new req!";
         addRequest();
-    }
-
-    HardDrive::instance()->tick();
-    m_hardDriveModel.timerTick();
-
-    /*m_curSector++; // Next Sector
-    if (m_curSector == HardDrive::instance()->sectorsCount())
-        m_curSector = 0;
-    m_hardDriveModel.m_curSector = m_curSector;*/
 }

@@ -3,12 +3,14 @@
 
 #include <QMainWindow>
 
-#include "HardDriveTableModel.h"
-#include "NewRequestsModel.h"
-
 namespace Ui {
 class MainWindow;
 }
+
+class HardDriveTableModel;
+class NewRequestsModel;
+
+class HardDrive; // Placeholder to easify header
 
 class MainWindow : public QMainWindow
 {
@@ -21,8 +23,10 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    HardDriveTableModel m_hardDriveModel;
-    NewRequestsModel m_newReqModel;
+    HardDrive *m_hardDrive;
+
+    HardDriveTableModel *m_hardDriveModel;
+    NewRequestsModel *m_newReqModel;
 
     // Request ID
     uint m_curId = 0;
