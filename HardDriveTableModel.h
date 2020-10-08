@@ -3,12 +3,14 @@
 
 #include <QAbstractTableModel>
 
+class HardDrive;
+
 class HardDriveTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit HardDriveTableModel(QObject *parent = nullptr);
+    HardDriveTableModel(QObject *parent = nullptr, HardDrive *hardDrive = nullptr);
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -16,11 +18,13 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void timerTick();
+    void updateData();
+    void nextHead();
+    void previousHead();
 
-public slots:
-    void
 private:
+    HardDrive *m_hardDrive;
+    int m_curHead = 0; // Current head for table
 };
 
 #endif // HARDDRIVETABLEMODEL_H
