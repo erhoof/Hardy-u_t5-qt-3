@@ -26,6 +26,7 @@ public:
 
     void getBitAt(HardDrivePointer position);
     bool setBitAt(HardDrivePointer position, bool value);
+    bool getBitFastAt(HardDrivePointer position);
 
     bool getFinishValue();
 
@@ -38,6 +39,7 @@ public slots:
 signals:
     void byteReadFinish();
     void byteWriteFinish();
+    void dataChanged();
 
 private:
     bool ***m_data; // Head -> Cylinder -> Sector !!
