@@ -34,6 +34,13 @@ struct HardDrivePointer
 
         return *this;
     }
+
+    bool operator==(const HardDrivePointer &value)
+    {
+        return (cylinder == value.cylinder &&
+                head == value.head &&
+                sector == value.sector);
+    }
 };
 
 #endif // HARDDRIVEINFO_H
