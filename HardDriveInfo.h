@@ -26,6 +26,13 @@ struct HardDrivePointer
     int head = 0;
     int sector = 0;
 
+    HardDrivePointer (int cylinder, int head, int sector)
+    {
+        this->cylinder = cylinder;
+        this->head = head;
+        this->sector = sector;
+    }
+
     HardDrivePointer &operator=(const HardDrivePointer &value)
     {
         cylinder = value.cylinder;
