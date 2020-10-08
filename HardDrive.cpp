@@ -47,7 +47,7 @@ HardDrive::HardDrive(HardDriveInfo &info)
 
         for (int j = 0; j < m_size.cylinder; j++)
         {
-            m_data[j][i] = new bool[m_size.sector];
+            m_data[i][j] = new bool[m_size.sector];
         }
     }
 
@@ -66,6 +66,8 @@ HardDrive::HardDrive(HardDriveInfo &info)
     m_rotationDelayTimer->setInterval(m_rotationDelay);
     m_dataTransferTimer->setInterval(m_transferSpeed);
     m_spinTimer->setInterval(100);
+
+    m_spinTimer->start();
 }
 
 // Destructor
@@ -109,6 +111,21 @@ Direction HardDrive::curDirection() const
     return m_direction;
 }
 
+int HardDrive::cylindersCount() const
+{
+    return m_size.cylinder;
+}
+
+int HardDrive::sectorsCount() const
+{
+    return m_size.sector;
+}
+
+int HardDrive::headsCount() const
+{
+    return m_size.head;
+}
+
 void HardDrive::getBitAt(HardDrivePointer position)
 {
     setDirectionTo(position);
@@ -121,6 +138,11 @@ void HardDrive::getBitAt(HardDrivePointer position)
     m_spinTimer->stop(); // Stop animation
     m_accessTickTimer->start();
     m_rotationDelayTimer->start();
+}
+
+bool HardDrive::getBitFastAt(HardDrivePointer position)
+{
+    return m_data[position.head][position.cylinder][position.sector];
 }
 
 bool HardDrive::setBitAt(HardDrivePointer position, bool value)
@@ -197,6 +219,7 @@ void HardDrive::dataTransferTick()
     {
         m_data[m_reqPosition.head][m_reqPosition.cylinder][m_reqPosition.sector] = m_newValue;
         m_status = HardDriveStatus::Free;
+        emit dataChanged();
         emit byteWriteFinish();
     }
 
@@ -220,6 +243,8 @@ void HardDrive::spinTick()
         m_position.sector = 0;
     else
         m_position.sector++;
+
+    emit dataChanged();
 }
 
 // Check if got req position
