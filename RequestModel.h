@@ -3,6 +3,11 @@
 
 #include <QTime>
 
+enum class OperationType
+{
+    Read, Write
+};
+
 struct RequestModel
 {
     uint id;
@@ -13,6 +18,8 @@ struct RequestModel
 
     QTime creationTime;
     QTime finishTime;
+
+    OperationType operationType;
 
     int progressSecs() const
     {
