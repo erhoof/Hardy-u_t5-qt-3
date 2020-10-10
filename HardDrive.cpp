@@ -188,7 +188,7 @@ void HardDrive::setDirectionTo(HardDrivePointer position)
     }
 }
 
-// Timers
+// Timer
 void HardDrive::accessTimeTick()
 {
     m_position.cylinder = m_reqPosition.cylinder;
