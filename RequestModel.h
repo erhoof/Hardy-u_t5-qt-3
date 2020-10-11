@@ -37,6 +37,7 @@ struct RequestModel
 
     QString toString() const
     {
+        // TODO: Refactor to make counting correct
         if (finishTime == creationTime)
             return QString("%6 - %1 (%2) [c%3:h%7:s%4] :: start At %5")
                     .arg(QString::number(id),
