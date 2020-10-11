@@ -20,6 +20,13 @@ public:
     void addRequest(RequestModel req);
     bool removeRequest(uint id);
 
+    std::vector<RequestModel> &getList();
+
+    void updateData();
+
+signals:
+    void listUpdated();
+
 private:
     std::vector<RequestModel> m_list;
 };

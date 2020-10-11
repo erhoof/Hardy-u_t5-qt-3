@@ -31,11 +31,14 @@ QVariant NewRequestsModel::data(const QModelIndex &index, int role) const
 void NewRequestsModel::addRequest(RequestModel req)
 {
     m_list.push_back(req);
+    updateData();
+
+    emit listUpdated();
 }
 
 bool NewRequestsModel::removeRequest(uint id)
 {
-    int i=0;
+    int i = 0;
     for (auto &req : m_list)
     {
         if (req.id == id)
@@ -49,5 +52,24 @@ bool NewRequestsModel::removeRequest(uint id)
     else
         m_list.erase(m_list.begin() + id);
 
+    updateData();
+
+    emit listUpdated();
+
     return true;
+}
+
+std::vector<RequestModel> &NewRequestsModel::getList()
+{
+    return m_list;
+}
+
+void NewRequestsModel::updateData()
+{
+    // TODO: replace with removing by id
+
+    QModelIndex start = index(0, 0);
+    QModelIndex end = index(static_cast<int>(m_list.size()), 0);
+
+    emit dataChanged(start, end);
 }
