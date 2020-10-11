@@ -37,10 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->show();
 
     // New Requests List
-    /*ui->listView_new->setModel(m_newReqModel);
-    ui->listView_new->show();*/
+    ui->listView_new->setModel(m_newReqModel);
+    ui->listView_new->show();
 
-    timerId = startTimer(300);
+    timerId = startTimer(500);
 }
 
 MainWindow::~MainWindow()
@@ -57,6 +57,12 @@ void MainWindow::addRequest()
     newReq.filename = randomCharSeq(5) + '.' + randomCharSeq(3);
     newReq.cylinder = rand() % m_hardDrive->cylindersCount();
     newReq.sector = rand() % m_hardDrive->sectorsCount();
+    newReq.head = rand() % m_hardDrive->headsCount();
+
+    if (rand() % 2)
+        newReq.operationType = OperationType::Read;
+    else
+        newReq.operationType = OperationType::Write;
 
     m_newReqModel->addRequest(newReq);
 
@@ -80,6 +86,8 @@ QString MainWindow::randomCharSeq(int length)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    if (rand() %10 == 1)
+    event++; // remove warning
+
+    if (rand() % 10 == 1)
         addRequest();
 }
