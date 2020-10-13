@@ -14,6 +14,7 @@ SOURCES += \
     InitialSetup.cpp \
     MainWindow.cpp \
     NewRequestsModel.cpp \
+    SortedReqListModel.cpp \
     main.cpp
 
 HEADERS += \
@@ -23,7 +24,8 @@ HEADERS += \
     InitialSetup.h \
     MainWindow.h \
     NewRequestsModel.h \
-    RequestModel.h
+    RequestModel.h \
+    SortedReqListModel.h
 
 FORMS += \
     InitialSetup.ui \
