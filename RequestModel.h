@@ -13,9 +13,9 @@ struct RequestModel
     uint id;
     QString filename;
 
-    uint cylinder;
-    uint sector;
-    uint head;
+    int cylinder;
+    int sector;
+    int head;
 
     QTime creationTime;
     QTime finishTime;
