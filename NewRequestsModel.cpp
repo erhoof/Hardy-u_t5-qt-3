@@ -59,9 +59,14 @@ bool NewRequestsModel::removeRequest(uint id)
     return true;
 }
 
-std::vector<RequestModel> &NewRequestsModel::getList()
+std::vector<RequestModel> &NewRequestsModel::list()
 {
     return m_list;
+}
+
+int NewRequestsModel::listSize() const
+{
+    return m_list.size();
 }
 
 void NewRequestsModel::updateData()

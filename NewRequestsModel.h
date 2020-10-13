@@ -20,7 +20,8 @@ public:
     void addRequest(RequestModel req);
     bool removeRequest(uint id);
 
-    std::vector<RequestModel> &getList();
+    std::vector<RequestModel> &list();
+    int listSize() const;
 
     void updateData();
 
