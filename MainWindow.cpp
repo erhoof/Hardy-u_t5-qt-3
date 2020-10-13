@@ -86,7 +86,7 @@ QString MainWindow::randomCharSeq(int length)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    event++; // remove warning
+    event = nullptr; // remove warning
 
     if (rand() % 10 == 1)
         addRequest();
