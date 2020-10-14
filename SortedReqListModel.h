@@ -25,6 +25,8 @@ public:
 
     int finishedTaskID() const;
 
+    // TODO: Slots connect
+
 public slots:
     void updateList();
     void execTask();
