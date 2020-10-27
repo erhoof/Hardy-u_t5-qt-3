@@ -4,7 +4,9 @@
 #include "harddrive.h"
 
 #include "HardDriveTableModel.h"
+
 #include "NewRequestsModel.h"
+#include "SortedReqListModel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Init models
     m_hardDriveModel = new HardDriveTableModel(nullptr, m_hardDrive);
     m_newReqModel = new NewRequestsModel();
+    m_sortedReqModel = new SortedReqListModel(nullptr, m_newReqModel, m_hardDrive);
 
     // Hard Drive Scheme Table View
     ui->tableView->setModel(m_hardDriveModel);
@@ -39,6 +42,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // New Requests List
     ui->listView_new->setModel(m_newReqModel);
     ui->listView_new->show();
+
+    // Connect Lists
+    connect(m_newReqModel, &NewRequestsModel::listUpdated, m_sortedReqModel, &SortedReqListModel::updateList);
 
     timerId = startTimer(1000);
 }
@@ -88,6 +94,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
 {
     event = nullptr; // remove warning
 
-    if (rand() % 10 == 1)
+    if (rand() % 2 == 1)
         addRequest();
 }

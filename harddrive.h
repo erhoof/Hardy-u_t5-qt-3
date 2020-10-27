@@ -2,6 +2,7 @@
 #define HARDDRIVE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "HardDriveInfo.h"
 
