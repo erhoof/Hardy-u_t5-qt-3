@@ -43,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_new->setModel(m_newReqModel);
     ui->listView_new->show();
 
+    // Sorted Requests List
+    ui->listView_sorted->setModel(m_sortedReqModel);
+    ui->listView_sorted->show();
+
     // Connect Lists
     connect(m_newReqModel, &NewRequestsModel::listUpdated, m_sortedReqModel, &SortedReqListModel::updateList);
 

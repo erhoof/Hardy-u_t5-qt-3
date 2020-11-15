@@ -21,9 +21,7 @@ QVariant NewRequestsModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole)
-    {
         return m_list[index.row()].toString();
-    }
 
     return QVariant();
 }
