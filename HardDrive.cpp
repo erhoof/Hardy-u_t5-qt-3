@@ -1,6 +1,7 @@
 #include "harddrive.h"
 
 #include <QTimer>
+#include <QDebug>
 
 HardDrive::HardDrive(HardDriveInfo &info)
 {
@@ -126,11 +127,22 @@ int HardDrive::headsCount() const
     return m_size.head;
 }
 
-void HardDrive::getBitAt(HardDrivePointer position)
+bool HardDrive::getBitAt(RequestModel request)
 {
-    setDirectionTo(position);
+    // Check for input parameters
+    if (request.cylinder >= m_size.cylinder ||
+            request.head >= m_size.head ||
+            request.sector >= m_size.sector ||
+            m_status != HardDriveStatus::Free )
+        return false;
 
-    m_reqPosition = position;
+    setDirectionTo();
+
+    HardDrivePointer point;
+    point.cylinder = request.cylinder;
+    point.head = request.head;
+    point.sector = request.sector;
+    m_reqPosition = point;
 
     m_status = HardDriveStatus::Read;
 
@@ -138,29 +150,40 @@ void HardDrive::getBitAt(HardDrivePointer position)
     m_spinTimer->stop(); // Stop animation
     m_accessTickTimer->start();
     m_rotationDelayTimer->start();
+
+    qDebug() << "GET BIT AT" << (m_reqPosition.cylinder + 1) << ":" << (m_reqPosition.head + 1) << ":" << (m_reqPosition.sector + 1);
+
+    return true;
 }
 
-bool HardDrive::getBitFastAt(HardDrivePointer position)
+bool HardDrive::getBitFastAt(int cyl, int head, int sec)
 {
-    return m_data[position.head][position.cylinder][position.sector];
+    return m_data[head][cyl][sec];
 }
 
-bool HardDrive::setBitAt(HardDrivePointer position, bool value)
+bool HardDrive::setBitAt(RequestModel request)
 {
     // Check for input parameters
-    if (position.cylinder >= m_size.cylinder ||
-            position.head >= m_size.head ||
-            position.sector >= m_size.sector)
+    if (request.cylinder >= m_size.cylinder ||
+            request.head >= m_size.head ||
+            request.sector >= m_size.sector ||
+            m_status != HardDriveStatus::Free )
         return false;
 
-    m_reqPosition = position;
+    HardDrivePointer point;
+    point.cylinder = request.cylinder;
+    point.head = request.head;
+    point.sector = request.sector;
+    m_reqPosition = point;
 
-    m_newValue = value;
+    m_newValue = request.value;
     m_status = HardDriveStatus::Write;
 
     m_spinTimer->stop(); // Stop animation
     m_accessTickTimer->start();
     m_rotationDelayTimer->start();
+
+    qDebug() << "SET BIT AT" << (m_reqPosition.cylinder + 1) << ":" << (m_reqPosition.head + 1) << ":" << (m_reqPosition.sector + 1);
 
     return true;
 }
@@ -174,16 +197,35 @@ bool HardDrive::getFinishValue()
     return val;
 }
 
-void HardDrive::setDirectionTo(HardDrivePointer position)
+bool HardDrive::isFree()
+{
+    return (m_status == HardDriveStatus::Free);
+}
+
+RequestModel HardDrive::requestModel()
+{
+    return m_curRequest;
+}
+
+void HardDrive::nextTask(RequestModel reqModel)
+{
+    m_curRequest = reqModel;
+    if (reqModel.operationType == OperationType::Read)
+        getBitAt(reqModel);
+    else
+        setBitAt(reqModel);
+}
+
+void HardDrive::setDirectionTo()
 {
     if (m_direction == Direction::In)
     {
-        if (position.cylinder > m_position.cylinder)
+        if (m_curRequest.cylinder > m_position.cylinder)
             m_direction = Direction::Out;
     }
     else
     {
-        if (position.cylinder < m_position.cylinder)
+        if (m_curRequest.cylinder < m_position.cylinder)
             m_direction = Direction::In;
     }
 }
@@ -192,6 +234,9 @@ void HardDrive::setDirectionTo(HardDrivePointer position)
 void HardDrive::accessTimeTick()
 {
     m_position.cylinder = m_reqPosition.cylinder;
+
+    // fix for table
+    qDebug() << "CYL SET: " << (m_position.cylinder + 1);
 
     checkPosition();
 
@@ -202,6 +247,9 @@ void HardDrive::rotationDelayTick()
 {
     m_position.sector = m_reqPosition.sector;
 
+    // fix for table
+    qDebug() << "SEC SET: " << (m_position.sector + 1);
+
     checkPosition();
 
     m_rotationDelayTimer->stop();
@@ -209,22 +257,27 @@ void HardDrive::rotationDelayTick()
 
 void HardDrive::dataTransferTick()
 {
+    qDebug() << "DATA TRANSFER TICK";
+
     if (m_status == HardDriveStatus::Read)
     {
+        qDebug() << "READ FINISH.";
         m_newValue = m_data[m_reqPosition.head][m_reqPosition.cylinder][m_reqPosition.sector];
-        // Free is not set for thread safety
-        emit byteReadFinish();
+        m_curRequest.value = m_newValue; // to return result from hdd
+        m_status = HardDriveStatus::Free;
     }
     else if (m_status == HardDriveStatus::Write)
     {
+        qDebug() << "WRITE FINISH.";
         m_data[m_reqPosition.head][m_reqPosition.cylinder][m_reqPosition.sector] = m_newValue;
         m_status = HardDriveStatus::Free;
         emit dataChanged();
-        emit byteWriteFinish();
     }
 
     m_dataTransferTimer->stop();
     m_spinTimer->start(); // Start animation
+
+    emit taskFinished(m_curRequest);
 }
 
 void HardDrive::spinTick()

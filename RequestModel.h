@@ -17,6 +17,8 @@ struct RequestModel
     int sector;
     int head;
 
+    int value;
+
     QTime creationTime;
     QTime finishTime;
 

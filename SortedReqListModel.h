@@ -29,7 +29,7 @@ public:
 
 public slots:
     void updateList();
-    void execTask();
+    void operateNextTask();
 
 signals:
     void taskFinished();

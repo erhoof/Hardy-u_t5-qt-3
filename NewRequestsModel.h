@@ -28,6 +28,9 @@ public:
 signals:
     void listUpdated();
 
+public slots:
+    void removeTask(uint id);
+
 private:
     std::vector<RequestModel> m_list;
 };

@@ -1,5 +1,7 @@
 #include "NewRequestsModel.h"
 
+#include <QDebug>
+
 NewRequestsModel::NewRequestsModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -45,10 +47,12 @@ bool NewRequestsModel::removeRequest(uint id)
         i++;
     }
 
-    if (id > m_list.size())
+    qDebug() << "REMID: " << QString::number(i);
+
+    if (static_cast<uint>(i) > m_list.size())
         return false;
     else
-        m_list.erase(m_list.begin() + id);
+        m_list.erase(m_list.begin() + i);
 
     updateData();
 
@@ -75,4 +79,10 @@ void NewRequestsModel::updateData()
     QModelIndex end = index(static_cast<int>(m_list.size()), 0);
 
     emit dataChanged(start, end);
+}
+
+void NewRequestsModel::removeTask(uint id)
+{
+    qDebug() << "NEWREQLIST REMOVE: " << QString::number(id);
+    removeRequest(id);
 }

@@ -5,6 +5,7 @@
 #include <QTimer>
 
 #include "HardDriveInfo.h"
+#include "RequestModel.h"
 
 class HardDrive : public QObject
 {
@@ -25,21 +26,24 @@ public:
     HardDrivePointer position() const;
     Direction curDirection() const;
 
-    void getBitAt(HardDrivePointer position);
-    bool setBitAt(HardDrivePointer position, bool value);
-    bool getBitFastAt(HardDrivePointer position);
+    bool getBitAt(RequestModel position);
+    bool setBitAt(RequestModel position);
+    bool getBitFastAt(int cyl, int head, int sec);
 
     bool getFinishValue();
+    bool isFree();
+
+    RequestModel requestModel();
 
 public slots:
     void accessTimeTick();
     void rotationDelayTick();
     void dataTransferTick();
     void spinTick();
+    void nextTask(RequestModel reqModel);
 
 signals:
-    void byteReadFinish();
-    void byteWriteFinish();
+    void taskFinished(RequestModel reqModel);
     void dataChanged();
 
 private:
@@ -52,6 +56,7 @@ private:
     HardDrivePointer m_size;
     HardDrivePointer m_position;
     HardDrivePointer m_reqPosition;
+    RequestModel m_curRequest;
 
     Direction m_direction;
     HardDriveStatus m_status;
@@ -62,7 +67,7 @@ private:
     QTimer *m_dataTransferTimer;
     QTimer *m_spinTimer; // For free mode
 
-    void setDirectionTo(HardDrivePointer position);
+    void setDirectionTo();
     void checkPosition();
 };
 

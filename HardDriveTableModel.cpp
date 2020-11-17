@@ -34,7 +34,7 @@ QVariant HardDriveTableModel::data(const QModelIndex &index, int role) const
     {
     case Qt::DisplayRole:
         // Cylinder Head Sector
-        return m_hardDrive->getBitFastAt(HardDrivePointer(index.row(), m_curHead, index.column()));
+        return m_hardDrive->getBitFastAt(index.row(), m_curHead, index.column());
         break;
     case Qt::TextAlignmentRole:
         return Qt::AlignCenter;

@@ -9,6 +9,7 @@ CONFIG += c++11 sdk_no_version_check
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DoneReqListModel.cpp \
     HardDrive.cpp \
     HardDriveTableModel.cpp \
     InitialSetup.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    DoneReqListModel.h \
     HardDrive.h \
     HardDriveInfo.h \
     HardDriveTableModel.h \

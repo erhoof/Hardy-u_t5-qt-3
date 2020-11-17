@@ -10,6 +10,7 @@ class MainWindow;
 class HardDriveTableModel;
 class NewRequestsModel;
 class SortedReqListModel;
+class DoneReqListModel;
 
 class HardDrive; // Placeholder to easify header
 
@@ -29,6 +30,7 @@ private:
     HardDriveTableModel *m_hardDriveModel;
     NewRequestsModel *m_newReqModel;
     SortedReqListModel *m_sortedReqModel;
+    DoneReqListModel *m_doneReqModel;
 
     // Request ID
     uint m_curId = 0;

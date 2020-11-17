@@ -1,12 +1,15 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QDebug>
+
 #include "harddrive.h"
 
 #include "HardDriveTableModel.h"
 
 #include "NewRequestsModel.h"
 #include "SortedReqListModel.h"
+#include "DoneReqListModel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,10 +28,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_hardDrive = new HardDrive(info);
 
+    m_curId = 0;
+
     // Init models
     m_hardDriveModel = new HardDriveTableModel(nullptr, m_hardDrive);
     m_newReqModel = new NewRequestsModel();
     m_sortedReqModel = new SortedReqListModel(nullptr, m_newReqModel, m_hardDrive);
+    m_doneReqModel = new DoneReqListModel(nullptr);
 
     // Hard Drive Scheme Table View
     ui->tableView->setModel(m_hardDriveModel);
@@ -47,8 +53,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_sorted->setModel(m_sortedReqModel);
     ui->listView_sorted->show();
 
+    // Done Requests List
+    ui->listView_done->setModel(m_doneReqModel);
+    ui->listView_done->show();
+
     // Connect Lists
     connect(m_newReqModel, &NewRequestsModel::listUpdated, m_sortedReqModel, &SortedReqListModel::updateList);
+    connect(m_hardDrive, &HardDrive::taskFinished, m_doneReqModel, &DoneReqListModel::taskFinished); // HardDrive -> DoneList (finish)
+    // Remove task from NewTaskList
+    connect(m_doneReqModel, &DoneReqListModel::removeTask, m_newReqModel, &NewRequestsModel::removeTask);
+    // DoneList -> SortedList (give hard drive new task)
+    connect(m_doneReqModel, &DoneReqListModel::operateNextTask, m_sortedReqModel, &SortedReqListModel::operateNextTask);
 
     timerId = startTimer(1000);
 }
@@ -75,6 +90,8 @@ void MainWindow::addRequest()
         newReq.operationType = OperationType::Write;
 
     m_newReqModel->addRequest(newReq);
+
+    qDebug() << "NEW REQ: " << newReq.toString();
 
     m_curId++;
 }
