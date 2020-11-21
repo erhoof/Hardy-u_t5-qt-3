@@ -31,6 +31,8 @@ QVariant DoneReqListModel::data(const QModelIndex &index, int role) const
 void DoneReqListModel::taskFinished(RequestModel reqModel) {
     qDebug() << "TASK FINISHED.";
 
+    reqModel.finishTime = QTime::currentTime();
+
     m_list.push_back(reqModel);
 
     QModelIndex start = index(0, 0);

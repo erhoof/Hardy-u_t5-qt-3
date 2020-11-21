@@ -11,20 +11,11 @@
 #include "SortedReqListModel.h"
 #include "DoneReqListModel.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent, HardDriveInfo *info) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    // Init Hard Drive
-    HardDriveInfo info;
-    info.m_accessTime = 2000;
-    info.m_rotationDelay = 1000;
-    info.m_transferSpeed = 1000;
-    info.m_cylinders = 5;
-    info.m_heads = 1;
-    info.m_sectors = 10;
 
     m_hardDrive = new HardDrive(info);
 

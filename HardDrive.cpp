@@ -3,36 +3,36 @@
 #include <QTimer>
 #include <QDebug>
 
-HardDrive::HardDrive(HardDriveInfo &info)
+HardDrive::HardDrive(HardDriveInfo *info)
 {
     // Check for input params
-    if (info.m_accessTime > 0.0)
-        m_accessTime = info.m_accessTime;
+    if (info->m_accessTime > 0.0)
+        m_accessTime = info->m_accessTime;
     else
         m_accessTime = 1;
 
-    if (info.m_cylinders > 0)
-        m_size.cylinder = info.m_cylinders;
+    if (info->m_cylinders > 0)
+        m_size.cylinder = info->m_cylinders;
     else
         m_size.cylinder = 5;
 
-    if (info.m_heads > 0)
-        m_size.head = info.m_heads;
+    if (info->m_heads > 0)
+        m_size.head = info->m_heads;
     else
         m_size.head = 1;
 
-    if (info.m_rotationDelay > 0.0)
-        m_rotationDelay = info.m_rotationDelay;
+    if (info->m_rotationDelay > 0.0)
+        m_rotationDelay = info->m_rotationDelay;
     else
         m_rotationDelay = 2;
 
-    if (info.m_sectors > 0)
-        m_size.sector = info.m_sectors;
+    if (info->m_sectors > 0)
+        m_size.sector = info->m_sectors;
     else
         m_size.sector = 10;
 
-    if (info.m_transferSpeed > 0.0)
-        m_transferSpeed = info.m_transferSpeed;
+    if (info->m_transferSpeed > 0.0)
+        m_transferSpeed = info->m_transferSpeed;
     else
         m_transferSpeed = 10;
 

@@ -1,12 +1,12 @@
 //#include "InitialSetup.h"
-#include "MainWindow.h"
+#include "InitialSetup.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    InitialWindow w;
     w.show();
     return a.exec();
 }

@@ -12,7 +12,7 @@ class HardDrive : public QObject
     Q_OBJECT
 
 public:
-    explicit HardDrive(HardDriveInfo &info);
+    explicit HardDrive(HardDriveInfo *info);
     ~HardDrive();
 
     float accessTimeValue() const;

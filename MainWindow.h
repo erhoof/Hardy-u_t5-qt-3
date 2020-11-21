@@ -13,13 +13,14 @@ class SortedReqListModel;
 class DoneReqListModel;
 
 class HardDrive; // Placeholder to easify header
+struct HardDriveInfo;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr, HardDriveInfo *info = nullptr);
     ~MainWindow();
 
 private:
